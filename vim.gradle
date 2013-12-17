@@ -1,0 +1,21 @@
+task vimFiles << {
+  // create syntastic classpath files
+  def jars = new HashSet<String>()
+  getChildProjects().each { proj ->
+    proj.value.configurations.each { conf ->
+      conf.each { jar ->
+        jars.add(jar)
+      }
+    }
+  }
+  new File(rootProject.projectDir.absolutePath + "/.syntastic-classpath").text = jars.collect().join("\n")
+
+  // create .vimrc.local
+  new File(rootProject.projectDir.absolutePath + "/.vimrc.local").text = """
+let g:syntastic_java_javac_config_file_enabled = 1
+let g:syntastic_java_javac_config_file = '.syntastic-classpath'
+"""
+
+  println """Created .vimrc.local... don't forget to source this in your vim config"""
+}
+
