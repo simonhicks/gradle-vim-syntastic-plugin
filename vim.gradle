@@ -1,14 +1,25 @@
+// create syntastic classpath files
 task vimFiles << {
-  // create syntastic classpath files
-  def jars = new HashSet<String>()
-  getChildProjects().each { proj ->
-    proj.value.configurations.each { conf ->
+  def classpathFiles = new HashSet<String>()
+  def addJars = { proj ->
+    proj.configurations.each { conf ->
       conf.each { jar ->
-        jars.add(jar)
+        classpathFiles.add(jar)
+      }
+    }
+    proj.sourceSets.each { srcSet ->
+      srcSet.java.srcDirs.each { dir ->
+        println dir.absolutePath
+        classpathFiles.add(dir.absolutePath)
       }
     }
   }
-  new File(rootProject.projectDir.absolutePath + "/.syntastic-classpath").text = jars.collect().join("\n")
+  getChildProjects().each { proj ->
+    addJars(proj.value)
+  }
+  addJars(rootProject)
+
+  new File(rootProject.projectDir.absolutePath + "/.syntastic-classpath").text = classpathFiles.collect().join("\n")
 
   // create .vimrc.local
   new File(rootProject.projectDir.absolutePath + "/.vimrc.local").text = """
