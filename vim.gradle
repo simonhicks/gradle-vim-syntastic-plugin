@@ -19,7 +19,7 @@ task vimFiles << {
   }
   addJars(rootProject)
 
-  new File(rootProject.projectDir.absolutePath + "/.syntastic-classpath").text = classpathFiles.collect().join("\n")
+  new File(rootProject.projectDir.absolutePath + "/.syntastic-classpath").text = "let g:syntastic_java_javac_classpath = \""+classpathFiles.collect().join(":") + "\""  
 
   // create .vimrc.local
   new File(rootProject.projectDir.absolutePath + "/.vimrc.local").text = """
