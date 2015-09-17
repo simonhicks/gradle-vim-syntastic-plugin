@@ -1,3 +1,5 @@
+**Don't use this. Use https://github.com/Scuilion/gradle-syntastic-plugin - it's better.**
+
 # Gradle vim-syntastic plugin
 a gradle plugin to generate the classpath file and config variables for getting
 Syntastic.vim to work with a gradle build.
